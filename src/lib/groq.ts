@@ -1,7 +1,7 @@
 import { GenomeScores, ArchetypeName } from '../types';
 
-const GROQ_API_KEY = '';
-const GROQ_API_URL = '';
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || '';
+const GROQ_API_URL = import.meta.env.VITE_GROQ_API_URL || '';
 
 interface AIInsights {
   ai_summary: string;

@@ -132,8 +132,7 @@ export default function ComparePage({ currentGenome, onNavigate }: ComparePagePr
     ? getSharedTraits(currentGenome, compareGenome)
     : [];
 
-  const scoreKeys: (keyof typeof currentGenome.genome_scores)[] =
-    ['builder', 'explorer', 'researcher', 'creator', 'collector'];
+  const scoreKeys = ['builder', 'explorer', 'researcher', 'creator', 'collector'] as const;
 
   return (
     <div className="min-h-screen bg-genome-bg grid-overlay pt-16">

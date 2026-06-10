@@ -48,6 +48,7 @@ export default function DNAVisualization({ scores, size = 320 }: DNAVisualizatio
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    const context = ctx;
 
     const W = size;
     const H = size;
@@ -69,14 +70,14 @@ export default function DNAVisualization({ scores, size = 320 }: DNAVisualizatio
     }
 
     function draw() {
-      ctx.clearRect(0, 0, W, H);
+      context.clearRect(0, 0, W, H);
 
       // Background glow
-      const bgGrad = ctx.createRadialGradient(cx, H / 2, 0, cx, H / 2, H * 0.5);
+      const bgGrad = context.createRadialGradient(cx, H / 2, 0, cx, H / 2, H * 0.5);
       bgGrad.addColorStop(0, 'rgba(34,197,94,0.04)');
       bgGrad.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, W, H);
+      context.fillStyle = bgGrad;
+      context.fillRect(0, 0, W, H);
 
       const t = timeRef.current;
       const segH = H / nodeCount;
@@ -97,40 +98,40 @@ export default function DNAVisualization({ scores, size = 320 }: DNAVisualizatio
       }
 
       // Draw strand 1 curve
-      ctx.beginPath();
-      ctx.moveTo(strand1X[0], strandY[0]);
+      context.beginPath();
+      context.moveTo(strand1X[0], strandY[0]);
       for (let i = 1; i < strand1X.length; i++) {
         const cpY = (strandY[i - 1] + strandY[i]) / 2;
-        ctx.quadraticCurveTo(strand1X[i - 1], cpY, strand1X[i], strandY[i]);
+        context.quadraticCurveTo(strand1X[i - 1], cpY, strand1X[i], strandY[i]);
       }
-      const grad1 = ctx.createLinearGradient(0, 0, 0, H);
+      const grad1 = context.createLinearGradient(0, 0, 0, H);
       grad1.addColorStop(0, colors[0] + '99');
       grad1.addColorStop(0.5, colors[1] + 'cc');
       grad1.addColorStop(1, colors[0] + '99');
-      ctx.strokeStyle = grad1;
-      ctx.lineWidth = 2;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = colors[0];
-      ctx.stroke();
-      ctx.shadowBlur = 0;
+      context.strokeStyle = grad1;
+      context.lineWidth = 2;
+      context.shadowBlur = 8;
+      context.shadowColor = colors[0];
+      context.stroke();
+      context.shadowBlur = 0;
 
       // Draw strand 2 curve
-      ctx.beginPath();
-      ctx.moveTo(strand2X[0], strandY[0]);
+      context.beginPath();
+      context.moveTo(strand2X[0], strandY[0]);
       for (let i = 1; i < strand2X.length; i++) {
         const cpY = (strandY[i - 1] + strandY[i]) / 2;
-        ctx.quadraticCurveTo(strand2X[i - 1], cpY, strand2X[i], strandY[i]);
+        context.quadraticCurveTo(strand2X[i - 1], cpY, strand2X[i], strandY[i]);
       }
-      const grad2 = ctx.createLinearGradient(0, 0, 0, H);
+      const grad2 = context.createLinearGradient(0, 0, 0, H);
       grad2.addColorStop(0, colors[2] + '99');
       grad2.addColorStop(0.5, colors[0] + 'cc');
       grad2.addColorStop(1, colors[2] + '99');
-      ctx.strokeStyle = grad2;
-      ctx.lineWidth = 2;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = colors[2];
-      ctx.stroke();
-      ctx.shadowBlur = 0;
+      context.strokeStyle = grad2;
+      context.lineWidth = 2;
+      context.shadowBlur = 8;
+      context.shadowColor = colors[2];
+      context.stroke();
+      context.shadowBlur = 0;
 
       // Draw rungs (horizontal bridges)
       for (let i = 0; i < nodeCount; i++) {
@@ -141,28 +142,28 @@ export default function DNAVisualization({ scores, size = 320 }: DNAVisualizatio
         const brightness = 0.3 + 0.7 * Math.abs(Math.sin(phase));
 
         // Rung line
-        ctx.beginPath();
-        ctx.moveTo(x1, y);
-        ctx.lineTo(x2, y);
-        ctx.strokeStyle = `rgba(34,197,94,${brightness * 0.5})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        context.beginPath();
+        context.moveTo(x1, y);
+        context.lineTo(x2, y);
+        context.strokeStyle = `rgba(34,197,94,${brightness * 0.5})`;
+        context.lineWidth = 1;
+        context.stroke();
 
         // Node circles
         const nodeSize = 3 + brightness * 3;
         [x1, x2].forEach((nx) => {
-          const grad = ctx.createRadialGradient(nx, y, 0, nx, y, nodeSize * 1.5);
+          const grad = context.createRadialGradient(nx, y, 0, nx, y, nodeSize * 1.5);
           grad.addColorStop(0, colors[1] + 'ff');
           grad.addColorStop(1, colors[0] + '00');
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(nx, y, nodeSize * 1.5, 0, Math.PI * 2);
-          ctx.fill();
+          context.fillStyle = grad;
+          context.beginPath();
+          context.arc(nx, y, nodeSize * 1.5, 0, Math.PI * 2);
+          context.fill();
 
-          ctx.beginPath();
-          ctx.arc(nx, y, nodeSize * 0.5, 0, Math.PI * 2);
-          ctx.fillStyle = '#ffffff';
-          ctx.fill();
+          context.beginPath();
+          context.arc(nx, y, nodeSize * 0.5, 0, Math.PI * 2);
+          context.fillStyle = '#ffffff';
+          context.fill();
         });
 
         // Spawn particles occasionally
@@ -178,23 +179,23 @@ export default function DNAVisualization({ scores, size = 320 }: DNAVisualizatio
         p.y += p.vy;
         p.life++;
         const alpha = (1 - p.life / p.maxLife) * 0.8;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
-        ctx.fill();
+        context.beginPath();
+        context.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        context.fillStyle = p.color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+        context.fill();
       });
 
       // Center axis glow line
-      ctx.beginPath();
-      ctx.moveTo(cx, 0);
-      ctx.lineTo(cx, H);
-      const axisGrad = ctx.createLinearGradient(0, 0, 0, H);
+      context.beginPath();
+      context.moveTo(cx, 0);
+      context.lineTo(cx, H);
+      const axisGrad = context.createLinearGradient(0, 0, 0, H);
       axisGrad.addColorStop(0, 'rgba(34,197,94,0)');
       axisGrad.addColorStop(0.5, 'rgba(34,197,94,0.08)');
       axisGrad.addColorStop(1, 'rgba(34,197,94,0)');
-      ctx.strokeStyle = axisGrad;
-      ctx.lineWidth = 1;
-      ctx.stroke();
+      context.strokeStyle = axisGrad;
+      context.lineWidth = 1;
+      context.stroke();
 
       timeRef.current += speed;
       animRef.current = requestAnimationFrame(draw);
