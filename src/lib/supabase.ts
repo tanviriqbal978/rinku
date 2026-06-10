@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { Genome, LeaderboardEntry } from '../types';
 
+console.log("SUPABASE_URL:", import.meta.env.VITE_SUPABASE_URL);
+console.log("SUPABASE_KEY:", import.meta.env.VITE_SUPABASE_KEY);
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || '';
 
