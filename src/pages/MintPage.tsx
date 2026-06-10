@@ -26,9 +26,13 @@ export default function MintPage({ onNavigate, onGenomeMinted }: MintPageProps) 
   // When wallet connects, move to generating
   useEffect(() => {
     if (isConnected && address && step === 'wallet') {
-      checkExistingAndGenerate(address);
+      // Small delay to let UI show the connected state before moving on
+      const timer = setTimeout(() => {
+        checkExistingAndGenerate(address);
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, step]);
 
   // Avatar URL via Unavatar
   const getAvatarUrl = (handle: string) =>
@@ -271,9 +275,17 @@ export default function MintPage({ onNavigate, onGenomeMinted }: MintPageProps) 
                 </button>
               </>
             ) : (
-              <div className="flex items-center justify-center gap-2 p-3 glass rounded-xl border border-green-500/20">
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-sm font-mono text-green-400">{shortAddr} connected</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-center gap-2 p-3 glass rounded-xl border border-green-500/20">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-sm font-mono text-green-400">{shortAddr} connected</span>
+                </div>
+                <button
+                  onClick={() => checkExistingAndGenerate(address!)}
+                  className="btn-primary w-full py-3 rounded-xl font-mono font-semibold text-sm flex items-center justify-center gap-2"
+                >
+                  🧬 Generate My Genome →
+                </button>
               </div>
             )}
           </div>
